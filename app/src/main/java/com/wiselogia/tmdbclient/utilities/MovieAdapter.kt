@@ -1,14 +1,12 @@
-package com.wiselogia.tmdbclient
+package com.wiselogia.tmdbclient.utilities
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.TextView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
+import com.wiselogia.tmdbclient.data.Movie
 import com.wiselogia.tmdbclient.databinding.MovieCardBinding
+import com.wiselogia.tmdbclient.glide
 
 class MovieAdapter(private val onClick: (Movie) -> Unit) :
     RecyclerView.Adapter<MovieAdapter.MovieHolder>() {

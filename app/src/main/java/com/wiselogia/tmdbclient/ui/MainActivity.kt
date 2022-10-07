@@ -1,15 +1,17 @@
-package com.wiselogia.tmdbclient
+package com.wiselogia.tmdbclient.ui
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.LayoutInflater
-import android.view.View
 import android.widget.Toast
 import androidx.appcompat.widget.SearchView
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.RecyclerView
+import com.wiselogia.tmdbclient.*
+import com.wiselogia.tmdbclient.data.MovieList
 import com.wiselogia.tmdbclient.databinding.ActivityMainBinding
+import com.wiselogia.tmdbclient.utilities.LoadMoreListener
+import com.wiselogia.tmdbclient.utilities.MovieAdapter
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
@@ -74,18 +76,6 @@ class MainActivity : AppCompatActivity() {
                     toast.show()
                 }
             })
-    }
-
-    inner class LoadMoreListener(private val onLoadMore: () -> Unit) : View.OnScrollChangeListener {
-        var isLoading = false
-        override fun onScrollChange(p0: View?, p1: Int, p2: Int, p3: Int, p4: Int) {
-            if(((p0 as RecyclerView).layoutManager as GridLayoutManager).findLastVisibleItemPosition() <
-                (p0.adapter as RecyclerView.Adapter).itemCount - 10 && !isLoading) {
-                onLoadMore
-                isLoading = true
-            }
-        }
-
     }
 }
 

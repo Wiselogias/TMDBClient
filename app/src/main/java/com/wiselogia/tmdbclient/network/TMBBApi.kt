@@ -1,5 +1,8 @@
-package com.wiselogia.tmdbclient
+package com.wiselogia.tmdbclient.network
 
+import com.wiselogia.tmdbclient.data.Movie
+import com.wiselogia.tmdbclient.data.MovieFull
+import com.wiselogia.tmdbclient.data.MovieList
 import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Path

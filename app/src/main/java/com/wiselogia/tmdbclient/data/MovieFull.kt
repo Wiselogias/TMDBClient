@@ -1,4 +1,4 @@
-package com.wiselogia.tmdbclient
+package com.wiselogia.tmdbclient.data
 
 import com.google.gson.annotations.SerializedName
 
