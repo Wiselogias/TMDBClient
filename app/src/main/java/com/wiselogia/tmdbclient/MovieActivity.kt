@@ -1,29 +1,36 @@
 package com.wiselogia.tmdbclient
 
+import android.annotation.SuppressLint
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.wiselogia.tmdbclient.databinding.MovieInfoBinding
 
 class MovieActivity: AppCompatActivity() {
-
+    lateinit var binding: MovieInfoBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.movie_info)
+        binding = MovieInfoBinding.inflate(LayoutInflater.from(this))
+        setContentView(binding.root)
+
         val id = intent.getIntExtra("id", 0)
         TMDBService.getData(id, object : TMDBService.OnResponseListener<MovieFull> {
+            @SuppressLint("SetTextI18n")
             override fun onSuccess(data: MovieFull) {
-                findViewById<TextView>(R.id.nameView).text = data.title
-                findViewById<TextView>(R.id.popularityView).text = data.popularity.toString()
-                findViewById<TextView>(R.id.dateView).text = data.release_date
-                findViewById<TextView>(R.id.statusView).text = data.status
-                findViewById<TextView>(R.id.budgetView).text = data.budget.toString()
-                findViewById<ImageView>(R.id.promoView).glide(data.image ?: "")
+                binding.nameView.text = data.title
+                binding.popularityView.text = "Popularity: " + data.popularity.toString()
+                binding.dateView.text = "Release date: " + data.release_date
+                binding.statusView.text = "Status: " + data.status
+                binding.budgetView.text = "Budget: " + data.budget.toString()
+                binding.promoView.glide(data.image)
+                binding.overviewView.text = data.overview
             }
 
-            override fun onFailed(code: Int) {
-                val toast = Toast.makeText(this@MovieActivity, "1error: $code", Toast.LENGTH_SHORT)
+            override fun onFailed(throwable: Throwable) {
+                val toast = Toast.makeText(this@MovieActivity, "error: " + throwable.message, Toast.LENGTH_SHORT)
                 toast.show()
             }
 

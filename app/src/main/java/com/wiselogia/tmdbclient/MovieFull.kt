@@ -14,5 +14,7 @@ data class MovieFull(
     @SerializedName("status")
     val status: String = "",
     @SerializedName("budget")
-    val budget: Int = 0
+    val budget: Int = 0,
+    @SerializedName("overview")
+    val overview: String = ""
 )

@@ -8,10 +8,11 @@ import android.widget.TextView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.wiselogia.tmdbclient.databinding.MovieCardBinding
 
-class MovieAdapter(private val onClick: (Movie) -> Unit):
+class MovieAdapter(private val onClick: (Movie) -> Unit) :
     RecyclerView.Adapter<MovieAdapter.MovieHolder>() {
-    var movies = listOf<Movie>()
+    private var movies = listOf<Movie>()
         set(value) {
             val res = DiffUtil.calculateDiff(object : DiffUtil.Callback() {
                 override fun getOldListSize() = field.size
@@ -30,24 +31,32 @@ class MovieAdapter(private val onClick: (Movie) -> Unit):
             field = value
             res.dispatchUpdatesTo(this)
         }
-    inner class MovieHolder(private val root: View) :RecyclerView.ViewHolder(root) {
-        private val imageView = root.findViewById<ImageView>(R.id.moviePoster)
-        private val titleView = root.findViewById<TextView>(R.id.movieTitle)
+
+    inner class MovieHolder(private val binding: MovieCardBinding) : RecyclerView.ViewHolder(binding.root) {
+        private val imageView = binding.moviePoster
+        private val titleView = binding.movieTitle
 
         fun bind(movie: Movie, onClick: (Movie) -> Unit) {
-                imageView.glide(movie.image ?: "")
+            imageView.glide(movie.image ?: "")
             titleView.text = movie.title
-            root.setOnClickListener {
+            binding.root.setOnClickListener {
                 onClick(movie)
             }
         }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MovieHolder {
-        return MovieHolder(LayoutInflater.from(parent.context).inflate(R.layout.movie_card, parent, false))
+        return MovieHolder(
+            MovieCardBinding.inflate(
+                LayoutInflater.from(parent.context),
+                parent,
+                false
+            )
+        )
     }
 
-    override fun onBindViewHolder(holder: MovieHolder, position: Int) = holder.bind(movies[position], onClick)
+    override fun onBindViewHolder(holder: MovieHolder, position: Int) =
+        holder.bind(movies[position], onClick)
 
     override fun getItemCount(): Int = movies.size
 
@@ -56,7 +65,9 @@ class MovieAdapter(private val onClick: (Movie) -> Unit):
             addAll(newItems)
         }
     }
+
     fun clear() {
         movies = listOf()
     }
+
 }

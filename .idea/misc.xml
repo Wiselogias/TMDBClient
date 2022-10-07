@@ -3,12 +3,15 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/fedor/AndroidStudioProjects/TMDBClient/app/src/main/res/drawable/background.xml" value="0.2265" />
         <entry key="..\:/Users/fedor/AndroidStudioProjects/TMDBClient/app/src/main/res/drawable/blue_square_2_d537fb228cf3ded904ef09b136fe3fec72548ebc1fea3fbbd1ad9e36364db38b.xml" value="0.2265" />
-        <entry key="..\:/Users/fedor/AndroidStudioProjects/TMDBClient/app/src/main/res/layout/activity_main.xml" value="0.264" />
-        <entry key="..\:/Users/fedor/AndroidStudioProjects/TMDBClient/app/src/main/res/layout/movie_card.xml" value="0.2078804347826087" />
-        <entry key="..\:/Users/fedor/AndroidStudioProjects/TMDBClient/app/src/main/res/layout/movie_info.xml" value="0.2078804347826087" />
+        <entry key="..\:/Users/fedor/AndroidStudioProjects/TMDBClient/app/src/main/res/drawable/rounded_background.xml" value="0.2265" />
+        <entry key="..\:/Users/fedor/AndroidStudioProjects/TMDBClient/app/src/main/res/layout/activity_main.xml" value="0.25" />
+        <entry key="..\:/Users/fedor/AndroidStudioProjects/TMDBClient/app/src/main/res/layout/movie_card.xml" value="0.40190476190476193" />
+        <entry key="..\:/Users/fedor/AndroidStudioProjects/TMDBClient/app/src/main/res/layout/movie_info.xml" value="0.4716106604866744" />
         <entry key="..\:/Users/fedor/AndroidStudioProjects/TMDBClient/app/src/main/res/layout/searcher.xml" value="0.2078804347826087" />
         <entry key="..\:/Users/fedor/AndroidStudioProjects/TMDBClient/app/src/main/res/layout/tester.xml" value="0.2078804347826087" />
+        <entry key="..\:/Users/fedor/AndroidStudioProjects/TMDBClient/app/src/main/res/layout/text_info_card.xml" value="0.4" />
       </map>
     </option>
   </component>
