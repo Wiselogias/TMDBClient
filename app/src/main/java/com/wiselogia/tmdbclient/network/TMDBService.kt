@@ -1,53 +1,42 @@
-package com.wiselogia.tmdbclient
+package com.wiselogia.tmdbclient.network
 
+import com.wiselogia.tmdbclient.data.Movie
 import com.wiselogia.tmdbclient.data.MovieFull
-import com.wiselogia.tmdbclient.data.MovieList
-import com.wiselogia.tmdbclient.network.TMBBApi
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
+import io.reactivex.Observable
+import io.reactivex.Scheduler
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 import retrofit2.Retrofit
+import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
+import java.util.concurrent.Executors
 
 object TMDBService {
+    const val APIKEY = "b94c9c8d4eb47d5e39df3ede28eca5dd"
+    val scheduler = Schedulers.from(Executors.newFixedThreadPool(10))
     private val retrofit: Retrofit = Retrofit.Builder()
         .baseUrl("https://api.themoviedb.org/3/")
+        .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
         .addConverterFactory(GsonConverterFactory.create())
         .build()
 
     private val tmdbApi = retrofit.create(TMBBApi::class.java)
 
-    fun getData(id: Int, listener: OnResponseListener<MovieFull>) {
-        tmdbApi
-            .getFullData(id, "b94c9c8d4eb47d5e39df3ede28eca5dd")
-            .enqueue(RetrofitCallback<MovieFull> (listener::onSuccess, listener::onFailed))
+    fun getDataObservable(id: Int) : Observable<MovieFull> {
+        return tmdbApi
+            .getFullDataObservable(id, APIKEY)
+            .subscribeOn(scheduler)
+            .observeOn(AndroidSchedulers.mainThread())
     }
 
-    fun getListData(page: Int, query: String, listener: OnResponseListener<MovieList>) {
-        tmdbApi
-            .getListData("b94c9c8d4eb47d5e39df3ede28eca5dd", page, query)
-            .enqueue(RetrofitCallback<MovieList> (listener::onSuccess, listener::onFailed))
+    fun getListDataObservable(
+        page: Int,
+        query: String
+    ): Observable<List<Movie>> {
+        return tmdbApi.getListDataObservable(APIKEY, page, query).map {
+            it.results
+        }.subscribeOn(scheduler)
+            .observeOn(AndroidSchedulers.mainThread())
     }
 
-
-    interface OnResponseListener<T> {
-        fun onSuccess(data: T)
-        fun onFailed(throwable: Throwable)
-    }
 }
-
-class RetrofitCallback<T>(private val onSuccess: (T) -> Unit, private val onFailed: (Throwable) -> Unit): Callback<T> {
-    override fun onResponse(call: Call<T>, response: Response<T>) {
-        when {
-            response.code() == 200 && response.body() != null -> onSuccess(response.body()!!)
-            else -> onFailed(RetrofitException(response.code().toString()))
-        }
-
-    }
-
-    override fun onFailure(call: Call<T>, t: Throwable) {
-        onFailed(t)
-    }
-}
-
-class RetrofitException(message: String?) : Exception(message)
