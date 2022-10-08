@@ -19,6 +19,8 @@ interface TMBBApi {
     ) : Observable<MovieList>
 
     @GET("movie/{movie_id}")
-    fun getFullDataObservable(@Path(value = "movie_id", encoded = false) id: Int,
-                              @Query("api_key") key: String) : Observable<MovieFull>
+    fun getFullDataObservable(
+        @Path(value = "movie_id", encoded = false) id: Int,
+        @Query("api_key") key: String
+    ) : Observable<MovieFull>
 }
