@@ -1,16 +1,27 @@
 package com.wiselogia.tmdbclient.ui
 
 import android.annotation.SuppressLint
+import android.graphics.BlurMaskFilter
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
+import com.bumptech.glide.request.RequestOptions.bitmapTransform
+import com.wiselogia.tmdbclient.R
 import com.wiselogia.tmdbclient.data.MovieFull
-import com.wiselogia.tmdbclient.TMDBService
+import com.wiselogia.tmdbclient.network.TMDBService
 import com.wiselogia.tmdbclient.databinding.MovieInfoBinding
-import com.wiselogia.tmdbclient.glide
+import com.wiselogia.tmdbclient.utilities.glide
+import com.wiselogia.tmdbclient.utilities.glideWithBlur
+import io.reactivex.Observer
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.disposables.Disposable
+import jp.wasabeef.glide.transformations.BlurTransformation
 
 class MovieActivity: AppCompatActivity() {
+    private val disposable = CompositeDisposable()
     lateinit var binding: MovieInfoBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -18,27 +29,39 @@ class MovieActivity: AppCompatActivity() {
         setContentView(binding.root)
 
         val id = intent.getIntExtra("id", 0)
-        TMDBService.getData(id, object : TMDBService.OnResponseListener<MovieFull> {
-            @SuppressLint("SetTextI18n")
-            override fun onSuccess(data: MovieFull) {
-                binding.nameView.text = data.title
-                binding.popularityView.text = "Popularity: " + data.popularity.toString()
-                binding.dateView.text = "Release date: " + data.release_date
-                binding.statusView.text = "Status: " + data.status
-                binding.budgetView.text = "Budget: " + data.budget.toString()
-                binding.promoView.glide(data.image)
-                binding.overviewView.text = data.overview
+        TMDBService.getDataObservable(id).subscribe(object : Observer<MovieFull> {
+            override fun onSubscribe(d: Disposable?) {
+                disposable.add(d)
             }
 
-            override fun onFailed(throwable: Throwable) {
-                val toast = Toast.makeText(
-                    this@MovieActivity,
-                    "error: " + throwable.message,
-                    Toast.LENGTH_SHORT
-                )
-                toast.show()
+            @SuppressLint("SetTextI18n")
+            override fun onNext(value: MovieFull?) {
+                binding.overviewView.text = value?.overview
+                binding.statusView.text = "Status: " + value?.status
+                binding.budgetView.text = "Budget: " + value?.budget.toString()
+                binding.dateView.text = "Release: " + value?.release_date
+                binding.promoView.glide(value?.image ?: "")
+                binding.popularityView.text = "Popularity: " + value?.popularity.toString()
+                binding.nameView.text = value?.title
+                binding.backgroundView.glideWithBlur(value?.image ?: "")
             }
+
+            override fun onError(e: Throwable?) {
+                e?.printStackTrace()
+                Toast.makeText(
+                    this@MovieActivity,
+                    "error: " + (e?.message ?: ""),
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+
+            override fun onComplete() {}
 
         })
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        disposable.dispose()
     }
 }
