@@ -4,12 +4,12 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.wiselogia.tmdbclient.data.Movie
 import com.wiselogia.tmdbclient.databinding.MovieCardBinding
+import com.wiselogia.tmdbclient.ui.main.ShowableModel
 
-class MovieAdapter(private val onClick: (Movie) -> Unit) :
-    RecyclerView.Adapter<MovieAdapter.MovieHolder>() {
-    private var movies = listOf<Movie>()
+class ShowableAdapter(private val onClick: (ShowableModel) -> Unit) :
+    RecyclerView.Adapter<ShowableAdapter.ShowableHolder>() {
+    private var showables = listOf<ShowableModel>()
         set(value) {
             val res = DiffUtil.calculateDiff(object : DiffUtil.Callback() {
                 override fun getOldListSize() = field.size
@@ -29,21 +29,22 @@ class MovieAdapter(private val onClick: (Movie) -> Unit) :
             res.dispatchUpdatesTo(this)
         }
 
-    inner class MovieHolder(private val binding: MovieCardBinding) : RecyclerView.ViewHolder(binding.root) {
+    inner class ShowableHolder(private val binding: MovieCardBinding) :
+        RecyclerView.ViewHolder(binding.root) {
         private val imageView = binding.moviePoster
         private val titleView = binding.movieTitle
 
-        fun bind(movie: Movie, onClick: (Movie) -> Unit) {
-            imageView.glide(movie.image ?: "")
-            titleView.text = movie.title
+        fun bind(showable: ShowableModel, onClick: (ShowableModel) -> Unit) {
+            imageView.glide(showable.image)
+            titleView.text = showable.title
             binding.root.setOnClickListener {
-                onClick(movie)
+                onClick(showable)
             }
         }
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MovieHolder {
-        return MovieHolder(
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ShowableHolder {
+        return ShowableHolder(
             MovieCardBinding.inflate(
                 LayoutInflater.from(parent.context),
                 parent,
@@ -52,19 +53,19 @@ class MovieAdapter(private val onClick: (Movie) -> Unit) :
         )
     }
 
-    override fun onBindViewHolder(holder: MovieHolder, position: Int) =
-        holder.bind(movies[position], onClick)
+    override fun onBindViewHolder(holder: ShowableHolder, position: Int) =
+        holder.bind(showables[position], onClick)
 
-    override fun getItemCount(): Int = movies.size
+    override fun getItemCount(): Int = showables.size
 
-    fun addItems(newItems: List<Movie>) {
-        movies = movies.toMutableList().apply {
+    fun addItems(newItems: List<ShowableModel>) {
+        showables = showables.toMutableList().apply {
             addAll(newItems)
         }
     }
 
     fun clear() {
-        movies = listOf()
+        showables = listOf()
     }
 
 }
