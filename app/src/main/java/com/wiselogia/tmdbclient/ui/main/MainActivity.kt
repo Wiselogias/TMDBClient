@@ -94,7 +94,8 @@ class MainActivity : AppCompatActivity() {
 
     override fun onStop() {
         super.onStop()
-        disposable.dispose()
+        disposable.clear()
     }
+
 }
 

@@ -12,7 +12,7 @@ import io.reactivex.subjects.PublishSubject
 import io.reactivex.subjects.Subject
 
 class MainViewModel : ViewModel() {
-    private var page = 1
+    var page = 1
 
     val listSubject: PublishSubject<List<ShowableModel>> = PublishSubject.create()
     val errorSubject: BehaviorSubject<Throwable> = BehaviorSubject.create()
@@ -71,6 +71,6 @@ class MainViewModel : ViewModel() {
 
     override fun onCleared() {
         super.onCleared()
-        disposable.dispose()
+        disposable.clear()
     }
 }
