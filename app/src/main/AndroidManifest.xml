@@ -16,17 +16,23 @@
         android:theme="@style/Theme.TMDBClient"
         tools:targetApi="31">
         <activity
-            android:name=".ui.MainActivity"
+            android:name=".ui.main.MainActivity"
             android:exported="true"
-            android:windowSoftInputMode = "adjustResize">
+            android:windowSoftInputMode="adjustResize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ui.MovieActivity"
-            android:label="film"/>
+        <activity
+            android:name=".ui.movie.MovieActivity"
+            android:label="film"
+            android:exported="false" />
+        <activity
+            android:name=".ui.series.SeriesActivity"
+            android:label="series"
+            android:exported="false" />
     </application>
 
 </manifest>
